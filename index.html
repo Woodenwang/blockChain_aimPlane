@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>坐标战争</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<style type="text/css">
+			td {
+				width: 32px;
+				height: 32px;
+			}
+			
+			h1 {
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body >
+		<!--
+		<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+	<img src="img/true.png" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31"></div>
+<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<div id="div4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+-->
+
+		<div class="headerNav">
+			<div class="left">
+				<a >坐标战争</a>
+			</div>
+
+			<div class="right">
+				<a  onclick="window.open('playInfo.html', 'newwindow', 'height=400, width=800, top=100, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no');">玩法介绍</a>
+				<a >tronlink</a>
+			</div>
+
+		</div>
+		
+		<div class="gameStatus">
+			<span id="gameStatus">
+				准备游戏中！
+			</span>
+		</div>
+		<div class="main">
+			<div class="myView">
+				<div class="wrap">
+					<canvas id="bg" width="400" height="400" style="border:1px solid #000000;"></canvas>
+					<canvas id="plane" width="400" height="400" style="border:1px solid #000000;"></canvas>
+					<canvas id="tempCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+				</div>
+				<div class="meInfo">
+					我的钱包地址：<p id="myWallet"></p>
+				</div>
+			</div>
+			<div class="userInfo" style='display: inline-block;width: 300px;text-align: center;margin: auto;'>
+				<p class="gameInfo">匹配到对手后，在限定时间内完成我方阵营三架战机部署，并以回合制的形式，根据坐标点位攻击敌方战机，命中机头即可炸毁敌机。最先取胜的玩家可以获得奖励。</p>
+				<span id='bigVs'>VS</span><br />
+				<button onclick="clearCanvas()">重新部署飞机</button>
+				<div class="planeStop" style="height: 200px;">
+					<img src="img/plane.png" id="palneItem"  style='width: 100px;height: 100px;border: dashed 1px red;' ></img>
+				</div>
+				<button onclick="toPlay()">部署完成</button>
+			</div>
+			<div class="otherView">
+				<table id='table1'  border="1" style='display: inline-block;'>
+				<th colspan="12">攻击地图</th>
+					<tr>
+						<td id='1'></td>
+						<td id='2'></td>
+						<td id='3'></td>
+						<td id='4'></td>
+						<td id='5'></td>
+						<td id='6'></td>
+						<td id='7'></td>
+						<td id='8'></td>
+						<td id='9'></td>
+						<td id='10'></td>
+					</tr>
+					<tr>
+						<td id='11'></td>
+						<td id='12'></td>
+						<td id='13'></td>
+						<td id='14'></td>
+						<td id='15'></td>
+						<td id='16'></td>
+						<td id='17'></td>
+						<td id='18'></td>
+						<td id='19'></td>
+						<td id='20'></td>
+					</tr>
+					<tr>
+						<td id='21'></td>
+						<td id='22'></td>
+						<td id='23'></td>
+						<td id='24'></td>
+						<td id='25'></td>
+						<td id='26'></td>
+						<td id='27'></td>
+						<td id='28'></td>
+						<td id='29'></td>
+						<td id='30'></td>
+					</tr>
+					<tr>
+						<td id='31'></td>
+						<td id='32'></td>
+						<td id='33'></td>
+						<td id='34'></td>
+						<td id='35'></td>
+						<td id='36'></td>
+						<td id='37'></td>
+						<td id='38'></td>
+						<td id='39'></td>
+						<td id='40'></td>
+					</tr>
+					<tr>
+						<td id='41'></td>
+						<td id='42'></td>
+						<td id='43'></td>
+						<td id='44'></td>
+						<td id='45'></td>
+						<td id='46'></td>
+						<td id='47'></td>
+						<td id='48'></td>
+						<td id='49'></td>
+						<td id='40'></td>
+					</tr>
+					<tr>
+						<td id='51'></td>
+						<td id='52'></td>
+						<td id='53'></td>
+						<td id='54'></td>
+						<td id='55'></td>
+						<td id='56'></td>
+						<td id='57'></td>
+						<td id='58'></td>
+						<td id='59'></td>
+						<td id='60'></td>
+					</tr>
+					<tr>
+						<td id='61'></td>
+						<td id='62'></td>
+						<td id='63'></td>
+						<td id='64'></td>
+						<td id='65'></td>
+						<td id='66'></td>
+						<td id='67'></td>
+						<td id='68'></td>
+						<td id='69'></td>
+						<td id='70'></td>
+					</tr>
+					<tr>
+						<td id='71'></td>
+						<td id='72'></td>
+						<td id='73'></td>
+						<td id='74'></td>
+						<td id='75'></td>
+						<td id='76'></td>
+						<td id='77'></td>
+						<td id='78'></td>
+						<td id='79'></td>
+						<td id='80'></td>
+					</tr>
+					<tr>
+						<td id='81'></td>
+						<td id='82'></td>
+						<td id='83'></td>
+						<td id='84'></td>
+						<td id='85'></td>
+						<td id='86'></td>
+						<td id='87'></td>
+						<td id='88'></td>
+						<td id='89'></td>
+						<td id='90'></td>
+					</tr>
+					<tr>
+						<td id='91'></td>
+						<td id='92'></td>
+						<td id='93'></td>
+						<td id='94'></td>
+						<td id='95'></td>
+						<td id='96'></td>
+						<td id='97'></td>
+						<td id='98'></td>
+						<td id='99'></td>
+						<td id='100'></td>
+					</tr>
+				</table>
+				<div class="otherInfo">
+					对手钱包地址：<div id="youWallet">1353ct5ZGeD3qh6kVRknKh7J9HkTBmvogs</div>
+				</div>
+			</div>
+		
+		
+		</div>
+		
+
+	</body>
+	<script type="text/javascript">
+		var bg;
+		var bgCtx;
+		var plane;
+		var planeCtx;
+		var tempCanvas;
+		var mousetype ="up";
+		var mgtop;
+		var mgleft;
+		var downpoint=[];
+		var movepoint=[];
+		var uppoint=[];
+		var planeNum=0;
+		var maxPlaneNum=3;//飞机最大数量
+		
+		var planeArr=[]
+		
+		var myWalletId;
+		var youWalletId;
+		
+		var aimId=0;
+		window.onload = init;
+		
+		
+		
+
+		function init() {
+			
+			myWalletId=prompt("请输入波场钱包地址?");
+			if(myWalletId!=null && myWalletId!=""){
+				wirteBg();
+				plane = document.getElementById("bg");
+				planeCtx = plane.getContext("2d");
+				mgtop = plane.offsetTop+120;
+				mgleft = plane.offsetLeft+document.body.offsetWidth*0.08;
+				mouseEvents()
+				//加载用户钱包地址，并写入目标位置
+				document.getElementById('myWallet').innerHTML=myWalletId;
+			}else{
+				if(confirm("确认退出？")){
+					location.href='about:blank';
+				}else{
+					location.reload();
+				}
+			}
+		}
+		function changeGameStatus(_content){
+			document.getElementById('gameStatus').innerHTML=_content;
+		}
+		function mouseEvents() {
+			tempCanvas = document.getElementById("tempCanvas");
+			tempCanvasCtx = tempCanvas.getContext("2d");
+			//侦听事件
+			tempCanvas.onmousedown = Down;
+			tempCanvas.onmousemove = Move;
+			tempCanvas.onmouseup = Up;
+			tempCanvas.ontouchstart = Down;
+			tempCanvas.ontouchmove = Move;
+			tempCanvas.ontouchend = Up;
+		}
+
+		//绘制背景
+		function wirteBg() {
+			bg = document.getElementById("bg");
+			bgCtx = bg.getContext("2d");
+			//描绘背景
+			var gradient = bgCtx.createLinearGradient(0, 0, 0, 300); //createLinearGradient() 方法创建线性的渐变对象。
+			gradient.addColorStop(0, "#e0e0e0");
+			gradient.addColorStop(1, "#ffffff");
+			bgCtx.fillStyle = gradient;
+			bgCtx.fillRect = (0, 0, bg.width, bg.height);
+			//描绘边框
+			var grid_cols = 10;
+			var grid_rows = 10;
+			var cell_height = bg.height / grid_rows;
+			var cell_width = bg.width / grid_cols;
+			bgCtx.lineWidth = 1;
+			bgCtx.strokeStyle = "#a0a0a0";
+			//结束边框描绘
+			bgCtx.beginPath();
+			//准备画横线
+			for(var col = 0; col <= grid_cols; col++) {
+				var x = col * cell_width;
+				bgCtx.moveTo(x, 0);
+				bgCtx.lineTo(x, bg.height);
+			}
+			//准备画竖线
+			for(var row = 0; row <= grid_rows; row++) {
+				var y = row * cell_height;
+				bgCtx.moveTo(0, y);
+				bgCtx.lineTo(bg.width, y);
+			}
+			//完成描绘
+			bgCtx.stroke();
+
+		}
+		//绘制飞机
+		//
+		function drawPlane(imgName,x,y) {
+			//判定位置
+			//console.log('棋盘中的位置X:'+Math.ceil(x/40)+'------Y:'+Math.ceil(y/40));
+			var canvasX=Math.ceil(x/40);
+			var canvasY=Math.ceil(y/40);
+			
+			//判断数量
+			if(planeNum>=maxPlaneNum){
+				alert("没有飞机了");
+			}else{
+				//绘制图片
+				//创建新的图片对象
+				var img = new Image();
+				//指定图片的URL
+				img.src = "img/"+imgName+".png";
+				//浏览器加载图片完毕后再绘制图片
+				planeCtx.beginPath();
+				img.onload = function() {
+					//分别减去飞机高度宽度的一半
+					switch(imgName){
+						case "planeW"://左
+							planeCtx.drawImage(img,canvasX*40-40, canvasY*40-120,170,199);
+							planePoint={
+								"x":canvasX,
+								"y":canvasY,
+								"direction":"w"
+							}
+							//console.log('位置摆放：'+canvasX*40-40+"-------"+canvasY*40-120)
+							break;
+						case "planeN"://上
+							planeCtx.drawImage(img, canvasX*40-120, canvasY*40-40,199,170);
+							planePoint={
+								"x":canvasX,
+								"y":canvasY,
+								"direction":"n"
+							}
+							break;
+						case "planeE"://右
+							planeCtx.drawImage(img, canvasX*40-170, canvasY*40-120,170,199);
+							planePoint={
+								"x":canvasX,
+								"y":canvasY,
+								"direction":"e"
+							}
+							break;
+						case "planeS"://下
+							planeCtx.drawImage(img, canvasX*40-120, canvasY*40-170,199,170);
+							planePoint={
+								"x":canvasX,
+								"y":canvasY,
+								"direction":"s"
+							}
+							break;
+					}
+					//棋盘中的位置添加
+					
+					planeArr.push(planePoint)
+				};
+				planeCtx.closePath();
+				planeNum++;
+			}
+			
+			
+			
+		}
+		//清空画板
+		function clearCanvas(){
+			planeCtx.clearRect(0,0,400,400)
+			planeNum=0
+			wirteBg();
+//			index++
+//			mainContextImgDatasArr.push(plane.getImageData(0,0,canvaswidth,canvasheight))
+//			befor.disabled=false;
+		}
+
+		//事件点击
+		function toOtherPoint() {
+			//拖拽
+			//    绘制图片坐标
+			var X = 0;
+			var Y = 0;
+			//    js部分
+			var divObj = document.getElementById("palneItem");
+			var moveFlag = false;
+			//区别moueseup与click的标志
+			var clickFlag = false;
+			//    拖拽函数
+			divObj.onmousedown = function(e) {
+				moveFlag = true;
+				clickFlag = true;
+				var clickEvent = window.event || e;
+				var mwidth = clickEvent.clientX - divObj.offsetLeft;
+				var mheight = clickEvent.clientY - divObj.offsetTop;
+				document.onmousemove = function(e) {
+					clickFlag = false;
+					var moveEvent = window.event || e;
+					if(moveFlag) {
+						divObj.style.left = moveEvent.clientX - mwidth + "px";
+						divObj.style.top = moveEvent.clientY - mheight + "px";
+						////              将鼠标坐标传给Canvas中的图像
+						X = moveEvent.clientX - mwidth;
+						Y = moveEvent.clientY - mheight;
+						////              下面四个条件为限制div以及图像的活动边界
+						if(moveEvent.clientX <= mwidth) {
+							divObj.style.left = 0 + "px";
+							X = 0;
+						}
+						if(parseInt(divObj.style.left) + divObj.offsetWidth >= 1000) {
+							divObj.style.left = 1000 - divObj.offsetWidth + "px";
+							X = 1000 - divObj.offsetWidth;
+						}
+						if(moveEvent.clientY <= mheight) {
+							divObj.style.top = 0 + "px";
+							Y = 0;
+						}
+						if(parseInt(divObj.style.top) + divObj.offsetHeight >= 500) {
+							divObj.style.top = 500 - divObj.offsetHeight + "px";
+							Y = 500 - divObj.offsetHeight;
+						}
+						divObj.onmouseup = function() {
+							moveFlag = false;
+							if(clickFlag) {
+								alert("点击生效");
+							}
+						}
+					}
+				}
+			};
+		}
+		//按下事件
+		function Down(e) {
+			mousetype = "down";
+			event.preventDefault();
+			e = e.changedTouches == undefined ? e : e.changedTouches[0];
+			downpoint = [e.pageX - mgleft, e.pageY - mgtop];
+			console.log('鼠标按下:'+downpoint);
+			
+		}
+
+		//移动事件
+		function Move(e) {
+			if(mousetype == "up") return;
+			//	if(mousetype=="up"&&type!="eraser") return;
+			event.preventDefault();
+			e = e.changedTouches == undefined ? e : e.changedTouches[0];
+			movepoint = [e.pageX - mgleft, e.pageY - mgtop];
+			
+		}
+		var index = 0;
+		//抬起事件
+		function Up(e) {
+			mousetype = "up";
+			event.preventDefault();
+			e = e.changedTouches == undefined ? e : e.changedTouches[0];
+			uppoint = [e.pageX - mgleft, e.pageY - mgtop];
+			console.log('鼠标抬起坐标'+uppoint);
+			
+			/*
+			 * 在这里判断啊，按下时的（x，y）与抬起时的（X,Y）
+			 * if X-x>0&Y-y>0,w
+			 * X-x<0&Y-y>0,n
+			 * X-x<0&Y-y<0,e
+			 * X-x>0&Y-y<0,s
+			 */
+			if(uppoint[0]-downpoint[0]>=0 && uppoint[1]-downpoint[1]>=0){
+				//w
+				drawPlane("planeW",downpoint[0],downpoint[1]);
+			}else if (uppoint[0]-downpoint[0]<0 && uppoint[1]-downpoint[1]>0){
+				//n,北
+				drawPlane("planeN",downpoint[0],downpoint[1]);
+				
+			}else if (uppoint[0]-downpoint[0]<0 && uppoint[1]-downpoint[1]<0){
+				//e,东
+				drawPlane("planeE",downpoint[0],downpoint[1]);
+			}else if (uppoint[0]-downpoint[0]>0 && uppoint[1]-downpoint[1]<0){
+				//s,南
+				drawPlane("planeS",downpoint[0],downpoint[1]);
+			}
+			
+			
+		}
+		function numchange(_num){
+			_num+=1;
+			var i;
+			var j;
+			if (parseInt(_num/10)==0){
+				i=1
+				j=_num
+			}else{
+				i=parseInt(_num/10)+1
+				j=_num-parseInt(_num/10)*10
+				//console.log(_num)
+				if(i >= 10){
+					i='a';
+				}
+				if(j == 0){
+					j='a';
+				}
+			}
+			
+			return String(i)+String(j);
+		}
+		//攻击
+		for (var i=0;i<100;i++) {
+			document.getElementsByTagName('td')[i].onclick = function() {
+				aimId=this.id-1;
+				console.log(numchange(aimId));
+				//点击发送攻击数据
+				var sendData = {
+					"userWallet":myWalletId,
+    				"aimPoint":numchange(aimId)
+				};
+				Ajax('get', 'http://192.168.210.202:8081/goGame', sendData, function(data) {
+					console.log(data);
+					//判断对方类型
+					switch(data){
+						case "1":
+							//击中
+							document.getElementsByTagName('td')[aimId].style.backgroundColor="#ff0"
+							break;
+						case "2":
+							//未击中
+							document.getElementsByTagName('td')[aimId].style.backgroundColor="#00f"
+							break;
+						case "3":
+							//击毁
+							document.getElementsByTagName('td')[aimId].style.backgroundColor="#f00"
+							break;
+						default:
+							alert('错误')
+					}
+					
+				}, function(error) {
+					console.log(error);
+				});
+				
+				this.style.backgroundColor = '#00f';
+			}
+		}
+		/**
+		 *位置判断
+		 * 
+		 *
+		 */
+		function potionView(){
+			
+		}
+
+
+		//数据发送
+		function Ajax(type, url, data, success, failed) {
+			// 创建ajax对象
+			var xhr = null;
+			if(window.XMLHttpRequest) {
+				xhr = new XMLHttpRequest();
+			} else {
+				xhr = new ActiveXObject('Microsoft.XMLHTTP')
+			}
+
+			var type = type.toUpperCase();
+			// 用于清除缓存
+			var random = Math.random();
+
+			if(typeof data == 'object') {
+				var str = '';
+				for(var key in data) {
+					str += key + '=' + data[key] + '&';
+				}
+				data = str.replace(/&$/, '');
+			}
+
+			if(type == 'GET') {
+				if(data) {
+					xhr.open('GET', url + '?' + data, true);
+				} else {
+					xhr.open('GET', url + '?t=' + random, true);
+				}
+				xhr.send();
+
+			} else if(type == 'POST') {
+				xhr.open('POST', url, true);
+				// 如果需要像 html 表单那样 POST 数据，请使用 setRequestHeader() 来添加 http 头。
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.send(data);
+			}
+
+			// 处理返回数据
+			xhr.onreadystatechange = function() {
+				if(xhr.readyState == 4) {
+					if(xhr.status == 200) {
+						success(xhr.responseText);
+					} else {
+						if(failed) {
+							failed(xhr.status);
+						}
+					}
+				}
+			}
+		}
+		function toPlay(){
+			if(planeNum<maxPlaneNum){
+				alert("您还未部署完三架飞机，请继续")
+			}else{
+				alert("开始")
+				document.getElementById("gameStatus").innerHTML='游戏进行中！';
+				
+				var sendData = {
+					"userWallet":myWalletId,
+    				"planeHeaderPoint":planeArr
+				};
+				Ajax('get', 'http://192.168.210.202:8081/startGame', sendData, function(data) {
+					console.log(data);
+				}, function(error) {
+					console.log(error);
+				});
+			}
+			
+		}
+		
+	</script>
+	<script type="text/javascript">
+		var arr=[
+				[3,1,3],
+				[1,2,1],[2,2,1],[3,2,1],[4,2,1],[5,2,1],
+				[3,3,1],[5,3,1],
+				[2,4,1],[3,4,1],[4,4,1],[5,4,1],[7,4,1],
+				[4,5,3],[5,5,1],[6,5,1],[7,5,1]
+				[3,6,3],[5,6,1],[7,6,1]
+				[1,7,1],[2,7,1],[3,7,1],[4,7,1],[5,7,1],
+				[3,8,1,],
+				[2,9,1],[3,9,1],[4,9,1]		
+			]
+		function attick(pos){
+			
+			
+		}
+	</script>
+</html>
